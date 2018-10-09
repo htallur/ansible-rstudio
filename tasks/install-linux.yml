@@ -10,6 +10,8 @@
     name: epel
     description: EPEL YUM repo
     baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+    enabled: yes
 
  
 - name: yum install pre-req packages
@@ -18,7 +20,7 @@
     state: present
   with_items:
     - wget
-    - nss-pam-ldap
+    - nss-pam-ldapd
     - openldap-clients
 
 - name: Download the rstudio package

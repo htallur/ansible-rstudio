@@ -1,0 +1,4 @@
+---
+r_repository:
+  - type: rpm
+    url: "http://cran.rstudio.com/bin/linux/redhat"

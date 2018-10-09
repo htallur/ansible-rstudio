@@ -22,6 +22,15 @@
     - wget
     - nss-pam-ldapd
     - openldap-clients
+    - texlive
+    - texinfo
+    - lapack
+    - lapack-devel
+    - rrdtool
+    - psmisc
+    - R
+    - texlive-epsf
+    - texinfo-tex
 
 - name: Download the rstudio package
   get_url: 

@@ -1,0 +1,37 @@
+---
+
+- name: Setting facts (yum, zypper)
+  set_fact:
+    agent_local_path: /tmp/rstudio-server.rpm
+  when: ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "zypper"
+
+- name: Add epel repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
+ 
+- name: yum install pre-req packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - wget
+    - nss-pam-ldap
+    - openldap-clients
+
+- name: Download the rstudio package
+  get_url: 
+    url: "https://{{ rstudio_download_url }}:{{ rstudio_version_rpm }}"
+    dest: "{{ agent_local_path }}"
+    validate_certs: no
+    timeout: 300
+    force: yes
+
+- name: Install RSTUDIO application (yum)
+  yum: 
+    name: "{{ agent_local_path }}"
+    state: present
+  when: ansible_pkg_mgr == "yum"
+  become: true

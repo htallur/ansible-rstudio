@@ -1,0 +1,17 @@
+---
+- name: "Listing parameters"
+  debug:
+    msg:
+       - "operation                    : {{ operation }}"
+
+- name: Install rstudio 
+  include_tasks: install.yml
+  when: operation == 'install'
+
+- name: Update rstudio 
+  include_tasks: update.yml
+  when: operation == 'update'
+
+- name: revert-delete rstudio 
+  include_tasks: delete.yml
+  when: operation == 'delete'

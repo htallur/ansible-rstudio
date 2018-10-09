@@ -1,0 +1,6 @@
+---
+- include_tasks: install-win.yml
+  when: ansible_os_family == "Windows"
+
+- include_tasks: install-linux.yml
+  when: ansible_os_family != "Windows"

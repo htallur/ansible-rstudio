@@ -1,0 +1,6 @@
+---
+#######################
+# Mandatory Variables #
+#######################
+rstudio_download_url: https://download2.rstudio.org/
+rstudio_version_rpm: rstudio-server-rhel-1.1.442-x86_64.rpm

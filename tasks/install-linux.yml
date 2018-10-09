@@ -25,7 +25,7 @@
 
 - name: Download the rstudio package
   get_url: 
-    url: "https://{{ rstudio_download_url }}:{{ rstudio_version_rpm }}"
+    url: "https://{{ rstudio_download_url }}/{{ rstudio_version_rpm }}"
     dest: "{{ agent_local_path }}"
     validate_certs: no
     timeout: 300

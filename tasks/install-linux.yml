@@ -2,7 +2,12 @@
 
 - name: Setting facts (yum, zypper)
   set_fact:
-    agent_local_path: /tmp/rstudio-server.rpm
+    rstudio_local_path: /tmp/rstudio-server.rpm
+  when: ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "zypper"
+
+- name: Setting facts (yum, zypper)
+  set_fact:
+    rshiny_local_path: /tmp/rshiny-server.rpm
   when: ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "zypper"
 
 - name: Add epel repository
@@ -13,7 +18,6 @@
     gpgcheck: no
     enabled: yes
 
- 
 - name: yum install pre-req packages
   yum:
     name: "{{ item }}"
@@ -31,18 +35,44 @@
     - R
     - texlive-epsf
     - texinfo-tex
+    - curl-devel
 
-- name: Download the rstudio package
+- name: Download the rstudio-server package
   get_url: 
     url: "https://{{ rstudio_download_url }}/{{ rstudio_version_rpm }}"
-    dest: "{{ agent_local_path }}"
+    dest: "{{ rstudio_local_path }}"
     validate_certs: no
     timeout: 300
     force: yes
 
-- name: Install RSTUDIO application (yum)
+- name: Install RSTUDIO-SERVER application (yum)
   yum: 
-    name: "{{ agent_local_path }}"
+    name: "{{ rstudio_local_path }}"
     state: present
   when: ansible_pkg_mgr == "yum"
   become: true
+
+## installing R package
+- name: Install R packages
+  shell: R -e "install.packages('{{ item }}', repos='https://cran.rstudio.com/')"
+  with_items:
+    - shiny
+    - rjson
+
+## install shiny-server
+- name: Download shiny-server package
+  get_url:
+    url: "https://{{ rshiny_download_url }}/{{ rshiny_version_rpm }}"
+    dest: "{{ rshiny_local_path }}"
+    validate_certs: no
+    timeout: 300
+    force: yes
+
+- name: Install RSHINY-SERVER application (yum)
+  yum:
+    name: "{{ rshiny_local_path }}"
+    state: present
+  when: ansible_pkg_mgr == "yum"
+  become: true
+
+

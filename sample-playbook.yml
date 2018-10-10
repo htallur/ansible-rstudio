@@ -5,4 +5,4 @@
   - name: get ec2 facts
     ec2_metadata_facts:
   roles:
-    - ansible-rstudio
+    - rstudio

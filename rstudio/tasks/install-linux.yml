@@ -75,4 +75,23 @@
   when: ansible_pkg_mgr == "yum"
   become: true
 
+# password creation methon
+# python -c 'import crypt; print(crypt.crypt("changeme", crypt.mksalt(crypt.METHOD_SHA512)))'
+- name: Add the user 'rstudio' 
+  user:
+    name: rstudio
+    comment: rstudio-server user
+    password: $6$9wfBmMJG/QqV30Wn$EQT60f0FOsuqFRMHIOIxDSleJWQxsrJc49m0LV2FyvbXD30/dXClye8.gH1APCGvbFFEMWk6kaH9J.v1rdYKp0
 
+
+
+- name: Start service rstudio-server, if not started
+  service:
+    name: rstudio-server
+    state: started
+
+
+- name: update rserver.conf
+  copy:
+    src: rserver.conf
+    dest: /etc/rstudio/rserver.conf

@@ -1,0 +1,75 @@
+- name: Setting facts (yum, zypper)
+  set_fact:
+    rstudio_local_path: /tmp/rstudio-server.rpm
+  when: ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "zypper"
+
+- name: Setting facts (yum, zypper)
+  set_fact:
+    rshiny_local_path: /tmp/rshiny-server.rpm
+  when: ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "zypper"
+
+- name: Add epel repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+    enabled: yes
+
+- name: Stop service rstudio-server, if not stopped
+  service:
+    name: rstudio-server
+    state: stopped
+
+- name: Stop service rshiny-server, if not stopped
+  service:
+    name: rshiny-server
+    state: stopped
+
+- name: yum install pre-req packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - texlive
+    - texinfo
+    - lapack
+    - lapack-devel
+    - rrdtool
+    - psmisc
+    - R
+    - texlive-epsf
+    - texinfo-tex
+    - curl-devel
+
+- name: UnInstall RSTUDIO-SERVER application (yum)
+  yum:
+    name: rstudio-server
+    state: absent
+  when: ansible_pkg_mgr == "yum"
+  become: true
+
+- name: UnInstall R packages
+  command: >
+    /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('{{ item }}' %in% installed.packages()[,'Package'])) { print('Not installed'); } else { remove.packages(pkgs='{{ item }}'); print('Removed'); }"
+  register: r_result
+  failed_when: r_result.rc != 0 
+  changed_when: '"Removed" in r_result.stdout'
+  with_items:
+  - rshiny
+  - rjson
+
+- name: remove the user 'rstudio'
+  user:
+    name: rstudio
+    state: absent
+    remove: yes
+
+- name: delete rstudio config files
+  file:
+    path: /etc/rstudio/{{ item }}
+    state: absent
+  with_items:
+    - rserver.conf
+    - rsession.conf
+

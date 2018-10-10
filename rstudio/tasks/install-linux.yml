@@ -36,6 +36,8 @@
     - texlive-epsf
     - texinfo-tex
     - curl-devel
+    - nfs-utils
+    - nfs4-acl-tools
 
 - name: Download the rstudio-server package
   get_url: 
@@ -54,7 +56,12 @@
 
 ## installing R package
 - name: Install R packages
-  shell: R -e "install.packages('{{ item }}', repos='https://cran.rstudio.com/')"
+  command: >
+    Rscript --slave --no-save --no-restore-history -e "if (! ('{{ item }}' %in% installed.packages()[,'Package'])) { install.packages(pkgs='{{ item }}', repos=c('https://cran.rstudio.com/')); print('Added'); } else { print('Already installed'); }"
+  register: r_result
+  failed_when: "r_result.rc != 0 or 'had non-zero exit status' in r_result.stderr"
+  changed_when:  "'Added' in r_result.stdout"
+  #shell: R -e "install.packages('{{ item }}', repos='https://cran.rstudio.com/')"
   with_items:
     - shiny
     - rjson
@@ -95,3 +102,12 @@
   copy:
     src: rserver.conf
     dest: /etc/rstudio/rserver.conf
+  notify:
+  - restart rstudio-server
+
+- name: update rsession.conf
+  copy:
+    src: rsession.conf
+    dest: /etc/rstudio/rsession.conf
+  notify:
+  - restart rstudio-server

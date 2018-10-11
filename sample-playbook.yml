@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: tag_ProductID_500
   become: yes
   pre_tasks:
   - name: get ec2 facts

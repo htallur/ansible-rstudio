@@ -5,7 +5,5 @@
   pre_tasks:
   - name: get ec2 facts
     ec2_metadata_facts:
-  environment:
-    http_proxy: http://{{ PROXY_HOST }}:{{ PROXY_PORT }}
   roles:
     - rstudio

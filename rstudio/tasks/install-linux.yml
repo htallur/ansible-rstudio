@@ -15,9 +15,17 @@
   yum_repository:
     name: epel
     description: EPEL YUM repo
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    baseurl: https://download.fedoraproject.org/pub/epel/7/$basearch/
     gpgcheck: no
     enabled: yes
+
+- name: set http proxy environment via command line
+  shell: |
+    export HTTP_PROXY="{{PROXY_HOST}}:{{PROXY_PORT}}"
+    export HTTPS_PROXY="{{PROXY_HOST}}:{{PROXY_PORT}}"
+    export http_proxy="{{PROXY_HOST}}:{{PROXY_PORT}}"
+    export https_proxy="{{PROXY_HOST}}:{{PROXY_PORT}}"
+
 
 - name: yum install pre-req packages
   yum:
@@ -39,10 +47,6 @@
     - curl-devel
     - nfs-utils
     - nfs4-acl-tools
-  environment: 
-    http_proxy: "{{ PROXY_HOST }}:{{ PROXY_PORT }}"
-    https_proxy: "{{ PROXY_HOST }}:{{ PROXY_PORT }}"
-    no_proxy: "{{ NO_PROXY }}"
 
 - name: Download the rstudio-server package
   get_url: 

@@ -7,6 +7,3 @@ rstudio_download_url: download2.rstudio.org
 rstudio_version_rpm: rstudio-server-rhel-1.1.442-x86_64.rpm
 rshiny_download_url: download3.rstudio.org/centos6.3/x86_64
 rshiny_version_rpm: shiny-server-1.5.9.923-x86_64.rpm
-proxy_env:
-  http_proxy: http://$PROXY_HOST:$PROXY_PORT
-  https_proxy: http://$PROXY_HOST:$PROXY_PORT

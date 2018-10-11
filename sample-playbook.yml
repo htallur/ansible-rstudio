@@ -6,6 +6,6 @@
   - name: get ec2 facts
     ec2_metadata_facts:
   environment:
-    http_proxy: http://$HTTP_HOST:$HTTP_PORT
+    http_proxy: http://{{HTTP_HOST}}:{{HTTP_PORT}}
   roles:
     - rstudio

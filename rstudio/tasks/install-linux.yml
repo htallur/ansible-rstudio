@@ -39,7 +39,10 @@
     - curl-devel
     - nfs-utils
     - nfs4-acl-tools
-  environment: "{{ proxy_env }}"
+  environment: 
+    http_proxy: "{{ PROXY_HOST }}:{{ PROXY_PORT }}"
+    https_proxy: "{{ PROXY_HOST }}:{{ PROXY_PORT }}"
+    no_proxy: "{{ NO_PROXY }}"
 
 - name: Download the rstudio-server package
   get_url: 

@@ -21,10 +21,10 @@
 
 - name: set http proxy environment via command line
   shell: |
-    export HTTP_PROXY=http://"{{PROXY_HOST}}:{{PROXY_PORT}}"
-    export HTTPS_PROXY=http://"{{PROXY_HOST}}:{{PROXY_PORT}}"
-    export http_proxy=http://"{{PROXY_HOST}}:{{PROXY_PORT}}"
-    export https_proxy=http://"{{PROXY_HOST}}:{{PROXY_PORT}}"
+    export HTTP_PROXY="{{PROXY}}"
+    export HTTPS_PROXY="{{PROXY}}"
+    export http_proxy="{{PROXY}}"
+    export https_proxy="{{PROXY}}"
 
 
 - name: yum install pre-req packages

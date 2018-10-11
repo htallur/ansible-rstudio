@@ -22,6 +22,7 @@
   yum:
     name: "{{ item }}"
     state: present
+    proxy: http://{{PROXY_HOST}}:{{PROXY_PORT}}
   with_items:
     - wget
     - nss-pam-ldapd

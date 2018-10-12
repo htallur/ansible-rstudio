@@ -29,7 +29,7 @@
     - texlive
     - texinfo
     - lapack
-    - lapack-devel
+#    - lapack-devel
     - rrdtool
     - psmisc
     - R

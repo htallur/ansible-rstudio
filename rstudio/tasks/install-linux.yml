@@ -30,12 +30,12 @@
     - texinfo
     - lapack
 #    - lapack-devel
-    - rrdtool
-    - psmisc
-    - R
-    - texlive-epsf
-    - texinfo-tex
-    - curl-devel
+#    - rrdtool
+#    - psmisc
+#    - R
+#    - texlive-epsf
+#    - texinfo-tex
+#    - curl-devel
     - nfs-utils
     - nfs4-acl-tools
   environment: "{{ proxy_env }}"

@@ -1,6 +1,5 @@
 ---
 
-
 - name: Setting facts (yum, zypper)
   set_fact:
     rstudio_local_path: /tmp/rstudio-server.rpm
@@ -52,6 +51,7 @@
     - curl-devel
     - nfs-utils
     - nfs4-acl-tools
+  environment: "{{ proxy_env }}"
 
 - name: Download the rstudio-server package
   get_url: 

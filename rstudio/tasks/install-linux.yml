@@ -18,6 +18,9 @@
     gpgcheck: no
     enabled: yes
 
+- name: setup http proxy
+  environment: "{{ proxy_env }}"
+
 - name: yum install pre-req packages
   yum:
     name: "{{ item }}"
@@ -38,7 +41,7 @@
 #    - curl-devel
     - nfs-utils
     - nfs4-acl-tools
-  environment: "{{ proxy_env }}"
+#  environment: "{{ proxy_env }}"
 
 - name: Download the rstudio-server package
   get_url: 

@@ -18,9 +18,6 @@
     gpgcheck: no
     enabled: yes
 
-- name: setup http proxy
-  environment: "{{ proxy_env }}"
-
 - name: yum install pre-req packages
   yum:
     name: "{{ item }}"

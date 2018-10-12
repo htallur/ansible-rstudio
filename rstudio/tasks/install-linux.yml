@@ -18,19 +18,6 @@
     gpgcheck: no
     enabled: yes
 
-- name: copy proxy script
-  template:
-    src: proxy.j2
-    dest: /tmp/proxy.sh
-    owner: root
-    group: root
-    mode: '0700'
-
-
-- name: set http proxy environment via command line
-  shell: /tmp/proxy.sh
-
-
 - name: yum install pre-req packages
   yum:
     name: "{{ item }}"

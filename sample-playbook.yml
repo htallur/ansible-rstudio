@@ -7,4 +7,7 @@
     ec2_metadata_facts:
   roles:
     - rstudio
-  environment: "{{ proxy_env }}"
+  environment:
+    http_proxy: http://172.31.13.6:3128
+    https_proxy: http://172.31.13.6:3128
+    no_proxy: 169.254.169.254

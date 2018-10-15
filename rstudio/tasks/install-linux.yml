@@ -18,6 +18,20 @@
     gpgcheck: no
     enabled: yes
 
+
+
+- name: yum install pre-req packages
+  yum:
+    name: "{{ item }}"
+    enablerepo: Red Hat Enterprise Linux Server 7 Extra(RPMs), Red Hat Enterprise Linux Server 7 Optional (RPMs)
+    state: present
+  with_items:
+    - lapack-devel
+    - texlive-epsf
+    - texinfo-tex
+
+
+
 - name: yum install pre-req packages
   yum:
     name: "{{ item }}"
@@ -29,16 +43,16 @@
     - texlive
     - texinfo
     - lapack
-#    - lapack-devel
-#    - rrdtool
-#    - psmisc
+    - rrdtool
+    - psmisc
 #    - R
 #    - texlive-epsf
 #    - texinfo-tex
-#    - curl-devel
+    - curl-devel
     - nfs-utils
     - nfs4-acl-tools
-#  environment: "{{ proxy_env }}"
+
+
 
 - name: Download the rstudio-server package
   get_url: 
@@ -58,12 +72,15 @@
 ## installing R package
 - name: Install R packages
   command: >
-    Rscript --slave --no-save --no-restore-history -e "if (! ("{{ item }}" in installed.packages()[,'Package'])) { install.packages(pkgs="{{ item }}", repos=c('https://cran.rstudio.com/')); print('Added'); } else { print('Already installed'); }"
+    Rscript --slave --no-save --no-restore-history -e "if (! ('{{ item }}' %in% installed.packages()[,'Package'])) { install.packages(pkgs='{{ item }}', repos=c('https://cran.rstudio.com/')); print('Added'); } else { print('Already installed'); }"
   register: r_result
-  failed_when: "r_result.rc != 0 or 'had non-zero exit status' in r_result.stderr"
-  changed_when:  "'Added' in r_result.stdout"
+#  failed_when: "r_result.rc != 0 "
+#  changed_when: "'Added' in  r_result.stdout "
   with_items:
     - shiny
+- debug: msg="{{ r_result.stdout }}"
+- debug: msg="{{ r_result.rc }}"
+- debug: msg="{{ r_result }}"
 
 ## install shiny-server
 - name: Download shiny-server package

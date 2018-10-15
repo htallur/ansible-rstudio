@@ -1,10 +1,11 @@
 ---
 - hosts: all
   remote_user: ec2-user
+  connection: local
   become: yes
-  pre_tasks:
-  - name: get ec2 facts
-    ec2_metadata_facts:
+#  pre_tasks:
+#  - name: get ec2 facts
+#    ec2_metadata_facts:
   roles:
     - rstudio
   environment:

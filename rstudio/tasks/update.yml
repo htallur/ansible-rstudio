@@ -1,0 +1,6 @@
+---
+- include_tasks: update-win.yml
+  when: ansible_os_family == "Windows"
+
+- include_tasks: update-linux.yml
+  when: ansible_os_family != "Windows"

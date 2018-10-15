@@ -15,6 +15,7 @@
     name: epel
     description: EPEL YUM repo
     baseurl: https://download.fedoraproject.org/pub/epel/7/$basearch/
+    metalink: https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
     gpgcheck: no
     enabled: yes
 
@@ -23,7 +24,7 @@
 - name: yum install pre-req packages
   yum:
     name: "{{ item }}"
-    enablerepo: Red Hat Enterprise Linux Server 7 Extra(RPMs), Red Hat Enterprise Linux Server 7 Optional (RPMs)
+    enablerepo: rhui-REGION-rhel-server-extras,rhui-REGION-rhel-server-optional
     state: present
   with_items:
     - lapack-devel
@@ -45,7 +46,7 @@
     - lapack
     - rrdtool
     - psmisc
-#    - R
+    - R
 #    - texlive-epsf
 #    - texinfo-tex
     - curl-devel
@@ -74,13 +75,10 @@
   command: >
     Rscript --slave --no-save --no-restore-history -e "if (! ('{{ item }}' %in% installed.packages()[,'Package'])) { install.packages(pkgs='{{ item }}', repos=c('https://cran.rstudio.com/')); print('Added'); } else { print('Already installed'); }"
   register: r_result
-#  failed_when: "r_result.rc != 0 "
-#  changed_when: "'Added' in  r_result.stdout "
+  failed_when: "r_result.rc != 0 or 'had non-zero exit status' in r_result.stderr"
+  changed_when: "'Added' in  r_result.stdout "
   with_items:
     - shiny
-- debug: msg="{{ r_result.stdout }}"
-- debug: msg="{{ r_result.rc }}"
-- debug: msg="{{ r_result }}"
 
 ## install shiny-server
 - name: Download shiny-server package

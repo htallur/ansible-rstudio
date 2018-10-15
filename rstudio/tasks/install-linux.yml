@@ -62,10 +62,8 @@
   register: r_result
   failed_when: "r_result.rc != 0 or 'had non-zero exit status' in r_result.stderr"
   changed_when:  "'Added' in r_result.stdout"
-  #shell: R -e "install.packages('{{ item }}', repos='https://cran.rstudio.com/')"
   with_items:
     - shiny
-    - rjson
 
 ## install shiny-server
 - name: Download shiny-server package
